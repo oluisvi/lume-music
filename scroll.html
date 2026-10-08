@@ -33,14 +33,15 @@
     .chapters p{font:15px/1.75 "DM Sans",sans-serif;max-width:430px;color:#615c53}
     .chapters a{margin-top:16px;color:#191715;font:10px "DM Mono",monospace;letter-spacing:.12em;text-transform:uppercase;border-bottom:1px solid #191715;padding:12px 0}
     .topbar nav a:focus-visible,.topbar a:focus-visible,.chapters a:focus-visible{outline:2px solid #e9b36e;outline-offset:5px}
+    .journey:focus-visible{outline:2px solid #e9b36e;outline-offset:-4px}
     @media(max-width:650px){.journey{height:420vh}.hud{padding:16vh 24px 9vh}.hud h1{font-size:clamp(59px,14vw,78px)}.hud p{max-width:310px;font-size:14px}.counter,.cue{bottom:25px;font-size:8px}.chapters article{min-height:60vh}.chapters article:nth-child(even){text-align:left;align-items:flex-start}}
-    @media(prefers-reduced-motion:reduce){.journey{height:100svh}.sticky{height:100svh;position:relative}.visual video{display:none}.progress{display:none}.cue{display:none}.chapters article{min-height:55vh}}
+    @media(prefers-reduced-motion:reduce){.journey{height:auto}.sticky{height:100svh;position:relative}.visual video{display:none}.progress{display:none}.cue{display:none}.chapters{padding-top:5vh}.chapters article{min-height:0;padding:9vh 0}}
   </style>
 </head>
 <body>
   <header class="topbar">
     <a class="brand" href="index.html">LUME<span>♫</span></a>
-    <nav><a href="#chapters">Capítulos</a></nav>
+    <nav aria-label="Navegação da experiência"><a href="index.html#case">Sobre o conceito</a></nav>
     <a class="bag" href="index.html">Voltar à loja ↗</a>
   </header>
   <main>
@@ -48,13 +49,13 @@
       <div class="sticky">
         <div class="progress" id="progress"></div>
         <div class="visual" aria-hidden="true">
-          <video id="storyVideo" muted playsinline preload="auto" poster="hero-still.png">
+          <video id="storyVideo" muted playsinline preload="metadata" poster="hero-still.png" aria-hidden="true">
             <source src="media/lume-story.mp4" type="video/mp4" />
           </video>
         </div>
         <div class="hud">
           <small id="kicker">01 / ABERTURA</small>
-          <h1 id="title">Um som chama<br /><em>outro.</em></h1>
+          <h1 id="title" aria-live="polite">Um som chama<br /><em>outro.</em></h1>
           <p id="copy">A guitarra encontra espaço antes da primeira nota.</p>
           <div class="counter" id="counter">01 — 04</div>
           <div class="cue">Role para avançar a cena ↓</div>
@@ -66,14 +67,14 @@
   <script>
     const scenes=[
       {n:"01",title:"Um som chama outro.",copy:"A guitarra encontra espaço antes da primeira nota."},
-      {n:"02",title:"A madeira guarda histórias.",copy:"Textura, cuidado e marcas de uma vida tocada."},
-      {n:"03",title:"A sala ganha corpo.",copy:"As mãos encontram as cordas. O silêncio começa a vibrar."},
-      {n:"04",title:"Agora é a sua vez.",copy:"Escolha o instrumento que vai acompanhar o próximo capítulo."}
+      {n:"02",title:"A primeira nota aparece.",copy:"Os dedos encontram as cordas e o acorde ocupa a sala."},
+      {n:"03",title:"O ritmo toma espaço.",copy:"Uma frase musical se repete, ganha intenção e deixa o corpo acompanhar."},
+      {n:"04",title:"A música fica no ar.",copy:"O take termina; a próxima ideia pode começar com o instrumento certo."}
     ];
     const journey=document.querySelector("#journey"),video=document.querySelector("#storyVideo"),chapters=document.querySelector("#chapters"),reduceMotion=matchMedia("(prefers-reduced-motion: reduce)").matches;
     scenes.forEach((scene,i)=>{const article=document.createElement("article");article.innerHTML="<small>"+scene.n+" / CAPÍTULO</small><h2>"+scene.title+"</h2><p>"+scene.copy+"</p>"+(i===3?'<a href="index.html#instrumentos">ENCONTRE SEU SOM ↗</a>':"");chapters.append(article)});
-    let raf=0,lastProgress=0,seekPending=false;
-    function update(){raf=0;const rect=journey.getBoundingClientRect(),range=Math.max(journey.offsetHeight-innerHeight,1),progress=Math.min(1,Math.max(0,-rect.top/range)),index=Math.min(scenes.length-1,Math.floor(progress*scenes.length));lastProgress=progress;document.querySelector("#kicker").textContent=scenes[index].n+" / CAPÍTULO";document.querySelector("#title").innerHTML=scenes[index].title.replace(/\.(?=\s|$)/,"<em>.</em>");document.querySelector("#copy").textContent=scenes[index].copy;document.querySelector("#counter").textContent=scenes[index].n+" — 04";document.querySelector("#progress").style.transform="scaleX("+progress+")";if(!reduceMotion&&Number.isFinite(video.duration)&&video.duration>0){const target=Math.min(video.duration-.04,progress*video.duration);if(Math.abs(video.currentTime-target)>.18&&!seekPending){seekPending=true;video.currentTime=target}}}
+    let raf=0,lastProgress=0,seekPending=false,activeIndex=-1;
+    function update(){raf=0;const rect=journey.getBoundingClientRect(),range=Math.max(journey.offsetHeight-innerHeight,1),progress=Math.min(1,Math.max(0,-rect.top/range)),index=Math.min(scenes.length-1,Math.floor(progress*scenes.length));lastProgress=progress;if(index!==activeIndex){activeIndex=index;document.querySelector("#kicker").textContent=scenes[index].n+" / CAPÍTULO";document.querySelector("#title").innerHTML=scenes[index].title.replace(/\.(?=\s|$)/,"<em>.</em>");document.querySelector("#copy").textContent=scenes[index].copy;document.querySelector("#counter").textContent=scenes[index].n+" — 04"}document.querySelector("#progress").style.transform="scaleX("+progress+")";if(!reduceMotion&&Number.isFinite(video.duration)&&video.duration>0){const target=Math.min(video.duration-.04,progress*video.duration);if(Math.abs(video.currentTime-target)>.18&&!seekPending){seekPending=true;video.currentTime=target}}}
     function queueUpdate(){if(!raf)raf=requestAnimationFrame(update)}
     addEventListener("scroll",queueUpdate,{passive:true});addEventListener("resize",queueUpdate);video.addEventListener("seeked",()=>{seekPending=false});video.addEventListener("loadedmetadata",()=>{if(!reduceMotion)video.currentTime=lastProgress*video.duration});update();
   </script>
