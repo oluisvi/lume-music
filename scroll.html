@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#11100f" />
+  <meta name="description" content="Lume — a história de um instrumento, do primeiro olhar ao primeiro acorde." />
+  <title>Lume — a música avança com você</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    html{scroll-behavior:auto}
+    body{background:#11100f;color:#eee9df}
+    .topbar{position:fixed;z-index:10;background:linear-gradient(#080a0ac9,transparent);border:0}
+    .journey{height:500vh;position:relative}
+    .sticky{height:100svh;min-height:520px;position:sticky;top:0;overflow:hidden;background:#121210 url("hero-still.png") center/cover no-repeat}
+    .visual,.visual video,.visual:after{position:absolute;inset:0}
+    .visual video{width:100%;height:100%;object-fit:cover;filter:brightness(.72)}
+    .visual:after{content:"";background:linear-gradient(90deg,#090b0bc9 0%,#090b0b68 49%,#090b0b10 100%),linear-gradient(0deg,#090b0bb0,transparent 32%)}
+    .hud{position:absolute;z-index:2;inset:0;padding:15vh var(--gutter) 10vh;display:flex;flex-direction:column;justify-content:center;pointer-events:none}
+    .hud small,.counter,.cue{font:10px "DM Mono",monospace;letter-spacing:.16em;text-transform:uppercase;color:#eee9df}
+    .hud small{color:#e9b36e}
+    .hud h1{font:500 clamp(64px,10vw,142px)/.88 "Playfair Display",serif;letter-spacing:-.05em;max-width:950px;margin:25px 0}
+    .hud h1 em{color:#e9b36e;font-weight:500}
+    .hud p{font:15px/1.75 "DM Sans",sans-serif;color:#e0dcd5;max-width:390px;margin:0}
+    .counter,.cue{position:absolute;bottom:38px}
+    .counter{left:var(--gutter)}.cue{right:var(--gutter)}
+    .progress{position:absolute;z-index:4;top:0;left:0;width:100%;height:3px;background:#d8944b;transform:scaleX(0);transform-origin:left}
+    .chapters{position:relative;z-index:3;background:#eee9df;color:#191715;padding:3px var(--gutter) 9vh}
+    .chapters article{min-height:70vh;padding:12vh 0;display:flex;flex-direction:column;justify-content:center;max-width:730px;border-bottom:1px solid #19171524}
+    .chapters article:nth-child(even){margin-left:auto;text-align:right;align-items:flex-end}
+    .chapters small{font:10px "DM Mono",monospace;letter-spacing:.16em;color:#a56536}
+    .chapters h2{font:500 clamp(47px,7.4vw,94px)/.94 "Playfair Display",serif;letter-spacing:-.04em;margin:22px 0}
+    .chapters p{font:15px/1.75 "DM Sans",sans-serif;max-width:430px;color:#615c53}
+    .chapters a{margin-top:16px;color:#191715;font:10px "DM Mono",monospace;letter-spacing:.12em;text-transform:uppercase;border-bottom:1px solid #191715;padding:12px 0}
+    .topbar nav a:focus-visible,.topbar a:focus-visible,.chapters a:focus-visible{outline:2px solid #e9b36e;outline-offset:5px}
+    @media(max-width:650px){.journey{height:420vh}.hud{padding:16vh 24px 9vh}.hud h1{font-size:clamp(59px,14vw,78px)}.hud p{max-width:310px;font-size:14px}.counter,.cue{bottom:25px;font-size:8px}.chapters article{min-height:60vh}.chapters article:nth-child(even){text-align:left;align-items:flex-start}}
+    @media(prefers-reduced-motion:reduce){.journey{height:100svh}.sticky{height:100svh;position:relative}.visual video{display:none}.progress{display:none}.cue{display:none}.chapters article{min-height:55vh}}
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="index.html">LUME<span>♫</span></a>
+    <nav><a href="#chapters">Capítulos</a></nav>
+    <a class="bag" href="index.html">Voltar à loja ↗</a>
+  </header>
+  <main>
+    <section class="journey" id="journey" aria-label="Vídeo narrativo da Lume controlado pelo scroll">
+      <div class="sticky">
+        <div class="progress" id="progress"></div>
+        <div class="visual" aria-hidden="true">
+          <video id="storyVideo" muted playsinline preload="auto" poster="hero-still.png">
+            <source src="media/lume-story.mp4" type="video/mp4" />
+          </video>
+        </div>
+        <div class="hud">
+          <small id="kicker">01 / ABERTURA</small>
+          <h1 id="title">Um som chama<br /><em>outro.</em></h1>
+          <p id="copy">A guitarra encontra espaço antes da primeira nota.</p>
+          <div class="counter" id="counter">01 — 04</div>
+          <div class="cue">Role para avançar a cena ↓</div>
+        </div>
+      </div>
+    </section>
+    <section class="chapters" id="chapters" aria-label="Capítulos da história"></section>
+  </main>
+  <script>
+    const scenes=[
+      {n:"01",title:"Um som chama outro.",copy:"A guitarra encontra espaço antes da primeira nota."},
+      {n:"02",title:"A madeira guarda histórias.",copy:"Textura, cuidado e marcas de uma vida tocada."},
+      {n:"03",title:"A sala ganha corpo.",copy:"As mãos encontram as cordas. O silêncio começa a vibrar."},
+      {n:"04",title:"Agora é a sua vez.",copy:"Escolha o instrumento que vai acompanhar o próximo capítulo."}
+    ];
+    const journey=document.querySelector("#journey"),video=document.querySelector("#storyVideo"),chapters=document.querySelector("#chapters"),reduceMotion=matchMedia("(prefers-reduced-motion: reduce)").matches;
+    scenes.forEach((scene,i)=>{const article=document.createElement("article");article.innerHTML="<small>"+scene.n+" / CAPÍTULO</small><h2>"+scene.title+"</h2><p>"+scene.copy+"</p>"+(i===3?'<a href="index.html#instrumentos">ENCONTRE SEU SOM ↗</a>':"");chapters.append(article)});
+    let raf=0,lastProgress=0,seekPending=false;
+    function update(){raf=0;const rect=journey.getBoundingClientRect(),range=Math.max(journey.offsetHeight-innerHeight,1),progress=Math.min(1,Math.max(0,-rect.top/range)),index=Math.min(scenes.length-1,Math.floor(progress*scenes.length));lastProgress=progress;document.querySelector("#kicker").textContent=scenes[index].n+" / CAPÍTULO";document.querySelector("#title").innerHTML=scenes[index].title.replace(/\.(?=\s|$)/,"<em>.</em>");document.querySelector("#copy").textContent=scenes[index].copy;document.querySelector("#counter").textContent=scenes[index].n+" — 04";document.querySelector("#progress").style.transform="scaleX("+progress+")";if(!reduceMotion&&Number.isFinite(video.duration)&&video.duration>0){const target=Math.min(video.duration-.04,progress*video.duration);if(Math.abs(video.currentTime-target)>.18&&!seekPending){seekPending=true;video.currentTime=target}}}
+    function queueUpdate(){if(!raf)raf=requestAnimationFrame(update)}
+    addEventListener("scroll",queueUpdate,{passive:true});addEventListener("resize",queueUpdate);video.addEventListener("seeked",()=>{seekPending=false});video.addEventListener("loadedmetadata",()=>{if(!reduceMotion)video.currentTime=lastProgress*video.duration});update();
+  </script>
+</body>
+</html>
