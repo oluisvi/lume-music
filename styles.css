@@ -15,5 +15,36 @@
 @media(max-width:800px){.header-actions .bag{display:flex}.product-track .product{flex-basis:calc((100% - 16px)/2)}.product-note{font-size:10px}}
 @media(max-width:560px){.product-track .product{flex-basis:84%;scroll-snap-align:center}.product-track{scroll-padding-inline:8%}.catalog-controls{grid-template-columns:1fr auto;gap:14px}.catalog-progress{grid-column:1/-1;grid-row:1}.catalog-counter{justify-self:start;text-align:left}.catalog-arrows button{width:46px;height:46px}.product-img{aspect-ratio:4/4.8}.product-serial{left:12px;bottom:12px}.entry-mark{font-size:40px}.entry-phrase{font-size:8px;letter-spacing:.14em}.demo-cart{right:12px;top:78px}}
 @media(prefers-reduced-motion:reduce){.motion-enhanced [data-reveal],.motion-enhanced [data-reveal].is-visible{opacity:1;transform:none;transition:none}.entry-panel,.entry-mark,.entry-phrase,.product-img img,.product-meta,.catalog-progress i,.catalog-arrows button{transition:none;animation:none}.product:hover .product-img img,.product:focus-within .product-img img{transform:none}}
+
+/* Editorial rhythm: compact the long scroll without rushing the visual chapters. */
+.manifesto{padding-block:clamp(88px,8vw,124px)}
+.catalog{padding-block:clamp(86px,8vw,112px) clamp(92px,8vw,118px)}
+.catalog-head{margin-bottom:clamp(32px,4vw,46px)}
+.story{height:78svh;min-height:600px;max-height:820px}
+.quote{padding-block:clamp(100px,9vw,128px)}
+.case-note{padding-block:clamp(76px,8vw,122px)}
+.case-note>h2{margin-bottom:clamp(34px,4vw,48px)}
+.newsletter{padding-block:clamp(82px,7.5vw,104px);gap:clamp(40px,7vw,96px)}
+.newsletter form{padding-top:0}
+.fixed-copy,.quote,.case-note{position:relative;z-index:1}
+@media(max-width:800px){
+  .manifesto{padding-block:76px}
+  .catalog{padding-block:76px 84px}
+  .catalog-head{margin-bottom:30px}
+  .story{height:76svh;min-height:560px}
+  .quote{padding-block:96px}
+  .case-note{padding-block:72px}
+  .newsletter{padding-block:72px;gap:18px}
+}
+@media(max-width:560px){
+  .manifesto{padding-block:62px}
+  .catalog{padding-block:62px 70px}
+  .catalog-head{margin-bottom:24px}
+  .story{height:72svh;min-height:520px}
+  .quote{padding-block:78px}
+  .case-note{padding-block:62px}
+  .case-note>h2{margin-bottom:24px}
+  .newsletter{padding-block:60px;gap:12px}
+}
 .thematic-entry.is-gone{visibility:hidden}
 .thematic-entry.is-gone{visibility:hidden}
